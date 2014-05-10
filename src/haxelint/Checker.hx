@@ -11,7 +11,7 @@ import haxeparser.Data.Token;
 class Checker {
 	var checks:Array<Check>;
 	var reporters:Array<IReporter>;
-	public var file:File;
+	public var file:LintFile;
 
 	public function new(){
 		checks = [
@@ -92,7 +92,7 @@ class Checker {
 		ast = parser.parse();
 	}
 
-	public function process(files:Array<File>):Void{
+	public function process(files:Array<LintFile>):Void{
 		for (reporter in reporters) reporter.start();
 
 		for (file in files) run(file);
@@ -100,7 +100,7 @@ class Checker {
 		for (reporter in reporters) reporter.finish();
 	}
 
-	public function run(file:File){
+	public function run(file:LintFile){
 		for (reporter in reporters) reporter.fileStart(file);
 
 		this.file = file;

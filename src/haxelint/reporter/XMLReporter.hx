@@ -23,7 +23,7 @@ class XMLReporter implements IReporter{
 		return s;
 	}
 
-	public function fileStart(f:File){
+	public function fileStart(f:LintFile){
 		var sb = new StringBuf();
 		sb.add("<file name=\"");
 		sb.add(encode(f.name));
@@ -31,7 +31,7 @@ class XMLReporter implements IReporter{
 		Sys.stdout().writeString(sb.toString());
 	}
 
-	public function fileFinish(f:File){
+	public function fileFinish(f:LintFile){
 		var sb = new StringBuf();
 		sb.add("</file>\n");
 		Sys.stdout().writeString(sb.toString());

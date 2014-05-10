@@ -16,8 +16,8 @@ class Reporter implements IReporter{
 
 	public function start():Void{}
 	public function finish():Void{}
-	public function fileStart(f:File):Void{}
-	public function fileFinish(f:File):Void{}
+	public function fileStart(f:LintFile):Void{}
+	public function fileFinish(f:LintFile):Void{}
 
 	public function addMessage(m:LintMessage){
 		var sb:StringBuf = new StringBuf();

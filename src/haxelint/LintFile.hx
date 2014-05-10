@@ -1,6 +1,6 @@
 package haxelint;
 
-typedef File = {
+typedef LintFile = {
 	var name:String;
 	var content:String;
 }
