@@ -1,0 +1,7 @@
+language: java
+
+before_install:
+  - ./.travis/before_install.sh
+
+script:
+  - haxe build.hxml
