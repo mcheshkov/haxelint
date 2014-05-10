@@ -23,5 +23,5 @@ Using API
 
 	var file = {name:"myfile.hx", content:"enum A{}"};
 	var checker = new Checker();
-	checker.addReporter(new XMLReporter()); // see IReporter, provide your own implementation
+	checker.addReporter(new XMLReporter()); // see haxelint.reporter.IReporter, provide your own implementation
 	checker.process([file]);
