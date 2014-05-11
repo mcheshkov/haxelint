@@ -4,7 +4,7 @@ import haxe.macro.Expr;
 
 class Utils {
 
-	static function walkTypePath(tp:TypePath, cb:Expr -> Void) {
+	public static function walkTypePath(tp:TypePath, cb:Expr -> Void) {
 		if (tp.params != null) {
 			for (p in tp.params) {
 				switch(p){
@@ -15,12 +15,12 @@ class Utils {
 		}
 	}
 
-	static function walkVar(v:Var, cb:Expr -> Void) {
+	public static function walkVar(v:Var, cb:Expr -> Void) {
 		if (v.type != null) walkComplexType(v.type, cb);
 		if (v.expr != null) walkExpr(v.expr, cb);
 	}
 
-	static function walkTypeParamDecl(tp:TypeParamDecl, cb:Expr -> Void) {
+	public static function walkTypeParamDecl(tp:TypeParamDecl, cb:Expr -> Void) {
 		if (tp.constraints != null) {
 			for (c in tp.constraints) walkComplexType(c, cb);
 		}
@@ -29,7 +29,7 @@ class Utils {
 		}
 	}
 
-	static function walkFunction(f:Function, cb:Expr -> Void) {
+	public static function walkFunction(f:Function, cb:Expr -> Void) {
 		for (a in f.args) {
 			if (a.type != null) walkComplexType(a.type, cb);
 			if (a.value != null) walkExpr(a.value, cb);
@@ -43,7 +43,7 @@ class Utils {
 		}
 	}
 
-	static function walkCase(c:Case, cb:Expr -> Void) {
+	public static function walkCase(c:Case, cb:Expr -> Void) {
 		for (v in c.values) {
 			walkExpr(v, cb);
 		}
@@ -51,12 +51,12 @@ class Utils {
 		if (c.expr != null) walkExpr(c.expr, cb);
 	}
 
-	static function walkCatch(c:Catch, cb:Expr -> Void) {
+	public static function walkCatch(c:Catch, cb:Expr -> Void) {
 		walkComplexType(c.type, cb);
 		walkExpr(c.expr, cb);
 	}
 
-	static function walkField(f:Field, cb:Expr -> Void) {
+	public static function walkField(f:Field, cb:Expr -> Void) {
 		switch(f.kind){
 			case FVar(t, e):
 				if (t != null) walkComplexType(t, cb);
@@ -69,7 +69,7 @@ class Utils {
 		}
 	}
 
-	static function walkComplexType(t:ComplexType, cb:Expr -> Void) {
+	public static function walkComplexType(t:ComplexType, cb:Expr -> Void) {
 		switch(t){
 			case TPath(p): walkTypePath(p, cb);
 			case TFunction(args, ret):
@@ -87,7 +87,7 @@ class Utils {
 		}
 	}
 
-	static function walkExpr(e:Expr, cb:Expr -> Void) {
+	public static function walkExpr(e:Expr, cb:Expr -> Void) {
 		cb(e);
 
 		switch(e.expr){
