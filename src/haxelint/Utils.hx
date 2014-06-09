@@ -1,8 +1,62 @@
 package haxelint;
 
+import haxeparser.Data.TypeDecl;
+import haxeparser.Data.Definition;
+import haxeparser.Data.ClassFlag;
 import haxe.macro.Expr;
 
 class Utils {
+
+	public static function walkFile(file:{pack: Array<String>, decls: Array<TypeDecl> }, cb:Expr -> Void) {
+		for (decl in file.decls){
+			walkTypeDecl(decl, cb);
+		}
+	}
+
+	public static function walkTypeDecl(td:TypeDecl, cb:Expr -> Void) {
+		switch(td.decl){
+		case EClass(d):
+			walkClass(d,cb);
+		case EEnum(d):
+			walkEnum(d,cb);
+		case EAbstract(a):
+			walkAbstract(a,cb);
+		case EImport(sl, mode):
+			walkImport(sl, mode,cb);
+		case ETypedef(d):
+			walkTypedef(d,cb);
+		case EUsing(path):
+			walkTypePath(path,cb);
+		}
+	}
+
+	public static function walkClass(d:Definition<ClassFlag, Array<Field>>, cb:Expr -> Void) {
+		for (p in d.params)   walkTypeParamDecl(p,cb);
+		for (m in d.meta) for (p in m.params) walkExpr(p,cb);
+		for (f in d.flags) switch f {
+			case HExtends(t) | HImplements(t): walkTypePath(t,cb);
+			default:
+		}
+		for (f in d.data) {
+			walkField(f,cb);
+		}
+	}
+
+	public static function walkEnum(d, cb:Expr -> Void) {
+		throw "Unimplemented";
+	}
+
+	public static function walkAbstract(d, cb:Expr -> Void) {
+		throw "Unimplemented";
+	}
+
+	public static function walkImport(sl, mode, cb:Expr -> Void) {
+		//Do nothing
+	}
+
+	public static function walkTypedef(d, cb:Expr -> Void) {
+		throw "Unimplemented";
+	}
 
 	public static function walkTypePath(tp:TypePath, cb:Expr -> Void) {
 		if (tp.params != null) {
@@ -134,7 +188,9 @@ class Utils {
 			case ESwitch(e, cases, edef):
 				walkExpr(e, cb);
 				for (c in cases) walkCase(c, cb);
-				if (edef != null) walkExpr(edef, cb);
+				if (edef != null && edef.expr != null){
+					walkExpr(edef, cb);
+				}
 			case ETry(e, catches):
 				walkExpr(e, cb);
 				for (c in catches) walkCatch(c, cb);
