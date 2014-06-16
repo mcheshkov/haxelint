@@ -14,32 +14,13 @@ class ListenerNameCheck extends Check {
 	}
 
 	override public function actualRun() {
-		for (td in _checker.ast.decls){
-			switch(td){
-			case EClass(d): searchClass(d);
-			case EAbstract(a): //trace("Abstract");
-
-			case EEnum(d): //trace("Enum");
-			case EImport(sl, mode): //trace("Import");
-			case ETypedef(d): //trace("typedef");
-			case EUsing(path): //trace("Using");
-			}
-		}
-	}
-
-	function searchClass(d:Definition<ClassFlag, Array<Field>>){
-		for (f in d.data){
-			switch(f.kind){
-				case FFun(ff): Utils.walkFunction(ff,function(e){
-					switch(e.expr){
-					case ECall(e, params):
-						searchCall(e,params);
-					default:
-					}
-				});
+		Utils.walkFile(_checker.ast,function(e) {
+			switch(e.expr){
+				case ECall(e, params):
+					searchCall(e, params);
 				default:
 			}
-		}
+		});
 	}
 
 	function searchCall(e,p){

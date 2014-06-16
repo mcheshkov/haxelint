@@ -20,7 +20,7 @@ class HexademicalLiteralsCheck extends Check {
 
 	function checkString(s:String, p){
 		var caps = false;
-		if (s.substr(0,2) == "0x"){
+		if (s.substr(0,2).toLowerCase() == "0x"){
 			var ss;
 			if (caps) ss = s.toUpperCase();
 			else ss = s.toLowerCase();
