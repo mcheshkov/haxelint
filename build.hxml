@@ -1,9 +1,9 @@
 -cp src
 
--lib hxparse
+-lib hxparse:3.0.0
 #-lib haxeparser
--lib haxeparser-substituted
--lib compiletime
+-lib haxeparser-substituted:1.0.0
+-lib compiletime:2.5.0
 
 --each
 
