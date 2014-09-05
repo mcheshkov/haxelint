@@ -1,8 +1,17 @@
 -cp src
--main haxelint.Main
 
 -lib hxparse
--lib haxeparser
+#-lib haxeparser
+-lib haxeparser-substituted
+-lib compiletime
 
--dce full
+--each
+
+--next
+-main haxelint.Main
 -neko bin/haxelint.n
+
+--next
+-cp test
+-main Test
+--interp
