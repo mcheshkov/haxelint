@@ -1,7 +1,7 @@
 package haxelint.checks;
 
+import haxe.macro.Expr.Position;
 import haxelint.LintMessage.SeverityLevel;
-import haxeparser.Data.Token;
 
 class Check {
 
@@ -23,6 +23,11 @@ class Check {
 	}
 
 	var messages:Array<LintMessage>;
+
+	public function logPos(msg:String, pos:Position, sev:SeverityLevel){
+		var lp = _checker.getLinePos(pos.min);
+		log(msg, lp.line+1, lp.ofs+1, INFO);
+	}
 
 	public function log(msg:String, l:Int, c:Int, sev:SeverityLevel){
 		messages.push({
