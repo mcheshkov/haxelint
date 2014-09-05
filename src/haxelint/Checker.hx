@@ -1,10 +1,9 @@
 package haxelint;
 
+import haxe.CallStack;
 import haxelint.checks.Check;
-import haxelint.checks.ListenerNameCheck;
-import haxeparser.Data.TypeDef;
+import haxeparser.Data.TypeDecl;
 import haxelint.reporter.IReporter;
-import haxelint.checks.IndentCheck;
 import haxeparser.HaxeLexer;
 import haxeparser.Data.Token;
 
@@ -14,11 +13,20 @@ class Checker {
 	public var file:LintFile;
 
 	public function new(){
-		checks = [
-		new IndentCheck(),
-		new ListenerNameCheck()
-		];
+		checks = [];
 		reporters = [];
+	}
+
+	public function addAllChecks() {
+		CompileTime.importPackage("haxelint.checks");
+		var checksClasses = CompileTime.getAllClasses(Check);
+		for (cl in checksClasses){
+			checks.push(Type.createInstance(cl,[]));
+		}
+	}
+
+	public function addCheck(check:Check) {
+		checks.push(check);
 	}
 
 	public function addReporter(r:IReporter):Void{
@@ -84,7 +92,7 @@ class Checker {
 		}
 	}
 
-	public var ast:{pack: Array<String>, decls: Array<TypeDef> };
+	public var ast:{pack: Array<String>, decls: Array<TypeDecl>};
 
 	function makeAST(){
 		var code = file.content;
@@ -104,13 +112,40 @@ class Checker {
 		for (reporter in reporters) reporter.fileStart(file);
 
 		this.file = file;
-		makeLines();
-		makePosIndices();
-		makeTokens();
-		makeAST();
+		try {
+			makeLines();
+			makePosIndices();
+			makeTokens();
+			makeAST();
+		}
+		catch (e:Dynamic){
+			for (reporter in reporters) reporter.addMessage({
+				fileName:file.name,
+				message:"Parsing failed: " + e + "\nStacktrace: " + CallStack.toString(CallStack.exceptionStack()),
+				line:1,
+				column:1,
+				severity:ERROR,
+				moduleName:"Checker"
+			});
+			return;
+		}
 
 		for (check in checks){
-			var messages = check.run(this);
+			var messages;
+			try {
+				messages = check.run(this);
+			}
+			catch (e:Dynamic) {
+				for (reporter in reporters) reporter.addMessage({
+					fileName:file.name,
+					message:"Check " + check.getModuleName() + " failed: " + e + "\nStacktrace: " + CallStack.toString(CallStack.exceptionStack()),
+					line:1,
+					column:1,
+					severity:ERROR,
+					moduleName:"Checker"
+				});
+				return;
+			}
 			for (reporter in reporters) for (m in messages) reporter.addMessage(m);
 		}
 

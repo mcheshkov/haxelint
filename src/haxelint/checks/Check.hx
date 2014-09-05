@@ -40,7 +40,7 @@ class Check {
 		});
 	}
 
-	function getModuleName():String{
+	public function getModuleName():String{
 		throw "Unimplemented";
 		return "";
 	}

@@ -20,6 +20,7 @@ class Main {
 			}
 
 			var checker = new Checker();
+			checker.addAllChecks();
 			checker.addReporter(new XMLReporter());
 			checker.process(toProcess);
 		}
