@@ -70,7 +70,6 @@ class NamingCheck extends Check {
 			switch(e.expr){
 				case EVars(vars):
 					for (v in vars){
-						trace(v.name);
 						if (! camelCaseRE.match(v.name)) logPos('Invalid casing of variable ${v.name}',e.pos,SeverityLevel.INFO);
 					}
 				default:
