@@ -1,3 +1,4 @@
+import haxelint.checks.TrailingWhitespaceCheck;
 import haxelint.checks.IndentationCharacterCheck;
 import haxelint.checks.NamingCheck;
 import haxelint.checks.SpacingCheck;
@@ -73,6 +74,47 @@ class A {
 		};
 
 		checkMessages(src,new IndentationCharacterCheck(), [message]);
+	}
+
+	function testTrailingWhitespace() {
+		var src = "
+class A {
+	var _a:Int = 0;
+}";
+
+		checkMessages(src, new TrailingWhitespaceCheck(), []);
+
+		src = "
+class A {
+	var _a:Int = 0;   \n
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"TrailingWhitespace",
+		line:3,
+		column:19, // -1 is because now it reports position of whole binop expr
+		severity:INFO,
+		message:"Trailing whitespace"
+		};
+
+		checkMessages(src,new TrailingWhitespaceCheck(), [message]);
+
+		src = "
+class A {
+	var _a:Int = 0;\t\n
+}";
+
+		message = {
+		fileName:FILE_NAME,
+		moduleName:"TrailingWhitespace",
+		line:3,
+		column:17, // -1 is because now it reports position of whole binop expr
+		severity:INFO,
+		message:"Trailing whitespace"
+		};
+
+		checkMessages(src,new TrailingWhitespaceCheck(), [message]);
 	}
 
 	function testSpacingAroundBinOp() {
