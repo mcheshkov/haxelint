@@ -1,3 +1,4 @@
+import haxelint.checks.NamingCheck;
 import haxelint.checks.SpacingCheck;
 import haxelint.LintMessage;
 import haxelint.LintFile;
@@ -56,6 +57,80 @@ class A {
 		};
 
 		checkMessages(src,new SpacingCheck(), [message]);
+	}
+
+	function testVariableCasing() {
+		var src = "
+class A {
+	public function f(){
+		var Abc;
+	}
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Naming",
+		line:4,
+		column:3,
+		severity:INFO,
+		message:"Invalid casing of variable Abc"
+		};
+
+		checkMessages(src,new NamingCheck(), [message]);
+	}
+
+	function testFieldVariableCasing() {
+		var src = "
+class A {
+	public var Abc:Int;
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Naming",
+		line:3,
+		column:9,
+		severity:INFO,
+		message:"Invalid casing of variable Abc"
+		};
+
+		checkMessages(src,new NamingCheck(), [message]);
+	}
+
+	function testInlineFieldVariableCasing() {
+		var src = "
+class A {
+	static inline var abc:Int;
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Naming",
+		line:3,
+		column:16, // haxeparser skips position of field flags
+		severity:INFO,
+		message:"Invalid casing of variable abc"
+		};
+
+		checkMessages(src,new NamingCheck(), [message]);
+	}
+
+	function testPrivateFieldVariableCasing() {
+		var src = "
+class A {
+	var abc:Int;
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Naming",
+		line:3,
+		column:2, // haxeparser skips position of field flags
+		severity:INFO,
+		message:"Invalid casing of private field abc"
+		};
+
+		checkMessages(src,new NamingCheck(), [message]);
 	}
 
 	function messageEquals(expected:LintMessage,actual:LintMessage){
