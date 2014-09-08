@@ -1,0 +1,12 @@
+{
+	"name": "haxelint",
+	"url": "https://github.com/mcheshkov/haxelint",
+	"license": "MIT",
+	"description": "Static analysis and style checking for Haxe in Haxe",
+	"version": "0.1.0",
+	"releasenote": "Initial version",
+	"contributors": ["mcheshkov"],
+	"dependencies": {
+		"haxeparser-substituted": "1.0.1"
+	}
+}
