@@ -24,7 +24,7 @@ class SpacingCheck extends Check {
 
 			switch e.expr {
 			case EBinop(bo,l,r) if (spaceAroundBinop):
-				if (r.pos.min - l.pos.max <= opSize(bo)+2) logPos('No space around ${opString(bo)}', e.pos, INFO);
+				if (r.pos.min - l.pos.max < opSize(bo)+2) logPos('No space around ${opString(bo)}', e.pos, INFO);
 			case EIf(econd,eif,eelse) if (spaceIfCondition):
 				if (econd.pos.min - e.pos.min < "if (".length) logPos('No space between `if\' and condition', e.pos, INFO);
 				if (eif.pos.min - econd.pos.max < ") ".length) logPos('No space between `if\' and condition', e.pos, INFO);

@@ -79,6 +79,15 @@ class A {
 		var src = "
 class A {
 	function f(){
+		a = b;
+	}
+}";
+
+		checkMessages(src,new SpacingCheck(), []);
+
+		src = "
+class A {
+	function f(){
 		a=b;
 	}
 }";
