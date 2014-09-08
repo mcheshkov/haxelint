@@ -12,10 +12,10 @@ class IndentationCharacterCheck extends Check {
 		var re;
 		var tab = true;
 		if (tab){
-			re = ~/^\t*\S/;
+			re = ~/^\t*(\S.*)?$/;
 		}
 		else{
-			re = ~/^ *\S/;
+			re = ~/^ *(\S.*)?$/;
 		}
 		for (i in 0 ... _checker.lines.length){
 			var line = _checker.lines[i];

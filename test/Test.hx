@@ -1,3 +1,4 @@
+import haxelint.checks.IndentationCharacterCheck;
 import haxelint.checks.NamingCheck;
 import haxelint.checks.SpacingCheck;
 import haxelint.LintMessage;
@@ -37,6 +38,41 @@ class Test extends haxe.unit.TestCase {
 		r.add(new Test());
 		var success = r.run();
 		Sys.exit(success?0:1);
+	}
+
+	function testIndentaionOnEmptyLines() {
+		//Use show whitespace on this test
+
+		var src = "
+class A {
+//no whitespace here\n
+}";
+
+
+		checkMessages(src,new IndentationCharacterCheck(), []);
+
+		src = "
+class A {
+//tabs here\n\t\t
+}";
+
+		checkMessages(src,new IndentationCharacterCheck(), []);
+
+		src = "
+class A {
+//spaces here\n        \n
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"IndentationCharacter",
+		line:4,
+		column:1,
+		severity:INFO,
+		message:"Wrong indentation character"
+		};
+
+		checkMessages(src,new IndentationCharacterCheck(), [message]);
 	}
 
 	function testSpacingAroundBinOp() {
