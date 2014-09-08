@@ -7,9 +7,21 @@ import haxe.CallStack;
 import sys.io.File;
 class Main {
 	public static function main() {
+		var args;
+		var cwd;
+		var oldCwd = null;
+
 		try{
-			if (Sys.args().length != 1) throw "Bad args count";
-			var fname = Sys.args()[0];
+			args = Sys.args();
+			cwd = Sys.getCwd();
+			if (Sys.getEnv("HAXELIB_RUN") != null){
+				cwd = args.pop();
+				oldCwd = Sys.getCwd();
+			}
+			if (args.length != 1) throw "Bad args count";
+			if (oldCwd != null) Sys.setCwd(cwd); // FIXME instead of this one should gracefully parse absolute-relative path
+
+			var fname = args[0];
 			var files:Array<String> = [];
 			traverse(fname, files);
 
@@ -28,6 +40,7 @@ class Main {
 			trace(e);
 			trace(CallStack.toString(CallStack.exceptionStack()));
 		}
+		if (oldCwd != null) Sys.setCwd(oldCwd); // FIXME instead of this one should gracefully parse absolute-relative path
 	}
 
 	private static function pathJoin(s:String, t:String):String{
