@@ -79,7 +79,14 @@ class A {
 	function testTrailingWhitespace() {
 		var src = "
 class A {
-	var _a:Int = 0;
+	var _a:Int = 0;\n
+}";
+
+		checkMessages(src, new TrailingWhitespaceCheck(), []);
+
+		var src = "\r
+class A {\r
+	var _a:Int = 0;\r
 }";
 
 		checkMessages(src, new TrailingWhitespaceCheck(), []);

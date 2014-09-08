@@ -62,20 +62,30 @@ class Checker {
 
 	public var lines:Array<String>;
 
+	var lineSeparator:String;
+
+	function findLineSeparator(){
+		var code = file.content;
+		for (i in 0 ... code.length){
+			var char = code.charAt(i);
+			if (char == "\r" || char == "\n"){
+				lineSeparator = char;
+				if (i + 1 < code.length){
+					char = code.charAt(i+1);
+					if (char == "\n") lineSeparator += char;
+				}
+				return;
+			}
+		}
+		//default
+		lineSeparator = "\n";
+	}
+
 	function makeLines(){
 		var code = file.content;
 		var left = false;
 		var s = 0;
-		lines = [];
-		for (i in 0...code.length){
-			if (code.charAt(i) == "\n"){
-				lines.push(code.substr(s,i-s));
-				s=i+1;
-				left = false;
-			}
-			else left = true;
-		}
-		if (left) lines.push(code.substr(s,code.length-s));
+		lines = code.split(lineSeparator);
 	}
 
 	public var tokens:Array<Token>;
@@ -113,6 +123,7 @@ class Checker {
 
 		this.file = file;
 		try {
+			findLineSeparator();
 			makeLines();
 			makePosIndices();
 			makeTokens();
