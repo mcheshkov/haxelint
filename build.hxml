@@ -4,6 +4,7 @@
 #-lib haxeparser
 -lib haxeparser-substituted:1.0.1
 -lib compiletime:2.5.0
+-lib hxargs:3.0.0
 
 --each
 
