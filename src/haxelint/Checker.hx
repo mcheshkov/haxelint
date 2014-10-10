@@ -70,7 +70,7 @@ class Checker {
 			var char = code.charAt(i);
 			if (char == "\r" || char == "\n"){
 				lineSeparator = char;
-				if (i + 1 < code.length){
+				if (char == "\r" && i + 1 < code.length){
 					char = code.charAt(i+1);
 					if (char == "\n") lineSeparator += char;
 				}
