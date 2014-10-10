@@ -1,3 +1,4 @@
+import haxelint.checks.IndentCheck;
 import haxelint.checks.TrailingWhitespaceCheck;
 import haxelint.checks.IndentationCharacterCheck;
 import haxelint.checks.NamingCheck;
@@ -31,18 +32,34 @@ class TestReporter implements IReporter{
 	}
 }
 
-class Test extends haxe.unit.TestCase {
-	static inline var FILE_NAME = "LintTest.hx";
+class CheckTestCase extends haxe.unit.TestCase {
+	//FIXME ?
+	/*static inline*/ var FILE_NAME = "LintTest.hx";
 
-	static function main() {
-		var r = new haxe.unit.TestRunner();
-		r.add(new Test());
-		var success = r.run();
-		Sys.exit(success?0:1);
+	function messageEquals(expected:LintMessage,actual:LintMessage){
+		assertEquals(expected.fileName,   actual.fileName);
+		assertEquals(expected.moduleName, actual.moduleName);
+		assertEquals(expected.line,       actual.line);
+		assertEquals(expected.column,     actual.column);
+		assertEquals(expected.severity,   actual.severity);
+		assertEquals(expected.message,    actual.message);
 	}
 
+	function checkMessages(src,check,expected:Array<LintMessage>){
+		var checker = new Checker();
+		var reporter = new TestReporter();
+		checker.addCheck(check);
+		checker.addReporter(reporter);
+		checker.process([{name:FILE_NAME,content:src}]);
+		assertEquals(expected.length,reporter.messages.length);
+		for (i in 0 ... expected.length)
+			messageEquals(expected[i],reporter.messages[i]);
+	}
+}
+
+class IndentationCharacterCheckTest extends CheckTestCase {
 	function testIndentaionOnEmptyLines() {
-		//Use show whitespace on this test
+//Use show whitespace on this test
 
 		var src = "
 class A {
@@ -75,7 +92,9 @@ class A {
 
 		checkMessages(src,new IndentationCharacterCheck(), [message]);
 	}
+}
 
+class TrailingWhitespaceCheckTest extends CheckTestCase {
 	function testTrailingWhitespace() {
 		var src = "
 class A {
@@ -123,7 +142,9 @@ class A {
 
 		checkMessages(src,new TrailingWhitespaceCheck(), [message]);
 	}
+}
 
+class SpacingCheckTest extends CheckTestCase {
 	function testSpacingAroundBinOp() {
 		var src = "
 class A {
@@ -142,17 +163,19 @@ class A {
 }";
 
 		var message = {
-			fileName:FILE_NAME,
-			moduleName:"Spacing",
-			line:4,
-			column:4 - 1, // -1 is because now it reports position of whole binop expr
-			severity:INFO,
-			message:"No space around ="
+		fileName:FILE_NAME,
+		moduleName:"Spacing",
+		line:4,
+		column:4 - 1, // -1 is because now it reports position of whole binop expr
+		severity:INFO,
+		message:"No space around ="
 		};
 
 		checkMessages(src,new SpacingCheck(), [message]);
 	}
+}
 
+class NamingCheckTest extends CheckTestCase {
 	function testVariableCasing() {
 		var src = "
 class A {
@@ -226,24 +249,17 @@ class A {
 
 		checkMessages(src,new NamingCheck(), [message]);
 	}
+}
 
-	function messageEquals(expected:LintMessage,actual:LintMessage){
-		assertEquals(expected.fileName,   actual.fileName);
-		assertEquals(expected.moduleName, actual.moduleName);
-		assertEquals(expected.line,       actual.line);
-		assertEquals(expected.column,     actual.column);
-		assertEquals(expected.severity,   actual.severity);
-		assertEquals(expected.message,    actual.message);
-	}
-
-	function checkMessages(src,check,expected:Array<LintMessage>){
-		var checker = new Checker();
-		var reporter = new TestReporter();
-		checker.addCheck(check);
-		checker.addReporter(reporter);
-		checker.process([{name:FILE_NAME,content:src}]);
-		assertEquals(expected.length,reporter.messages.length);
-		for (i in 0 ... expected.length)
-			messageEquals(expected[i],reporter.messages[i]);
+class Test extends CheckTestCase {
+	static function main() {
+		var r = new haxe.unit.TestRunner();
+		r.add(new Test());
+		r.add(new IndentationCharacterCheckTest());
+		r.add(new TrailingWhitespaceCheckTest());
+		r.add(new SpacingCheckTest());
+		r.add(new NamingCheckTest());
+		var success = r.run();
+		Sys.exit(success?0:1);
 	}
 }
