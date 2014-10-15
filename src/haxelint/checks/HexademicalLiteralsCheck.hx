@@ -18,14 +18,22 @@ class HexademicalLiteralsCheck extends Check {
 		});
 	}
 
+	var lowerPrefix = true;
+	var lowerBody = false;
+
 	function checkString(s:String, p){
-		var caps = false;
-		if (s.substr(0,2).toLowerCase() == "0x"){
-			var ss;
-			if (caps) ss = s.toUpperCase();
-			else ss = s.toLowerCase();
-			var lp = _checker.getLinePos(p.min);
-			if (s != ss) log('Bad hexademical literal', lp.line+1, lp.ofs+1, INFO);
+		var prefix = s.substr(0,2);
+		if (prefix.toLowerCase() == "0x"){
+			var prefixExpected = prefix;
+			if (lowerPrefix) prefixExpected = prefixExpected.toLowerCase();
+			else prefixExpected = prefixExpected.toUpperCase();
+			if (prefix != prefixExpected) logPos('Bad hexademical literal', p, SeverityLevel.INFO);
+
+			var bodyActual = s.substr(2);
+			var bodyExpected = bodyActual;
+			if (lowerBody) bodyExpected = bodyExpected.toLowerCase();
+			else bodyExpected = bodyExpected.toUpperCase();
+			if (bodyExpected != bodyActual) logPos('Bad hexademical literal', p, SeverityLevel.INFO);
 		}
 	}
 
