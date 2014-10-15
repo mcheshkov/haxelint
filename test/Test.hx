@@ -1,3 +1,4 @@
+import haxe.PosInfos;
 import haxelint.checks.IndentCheck;
 import haxelint.checks.TrailingWhitespaceCheck;
 import haxelint.checks.IndentationCharacterCheck;
@@ -45,13 +46,13 @@ class CheckTestCase extends haxe.unit.TestCase {
 		assertEquals(expected.message,    actual.message);
 	}
 
-	function checkMessages(src,check,expected:Array<LintMessage>){
+	function checkMessages(src,check,expected:Array<LintMessage>, ?pos:PosInfos){
 		var checker = new Checker();
 		var reporter = new TestReporter();
 		checker.addCheck(check);
 		checker.addReporter(reporter);
 		checker.process([{name:FILE_NAME,content:src}]);
-		assertEquals(expected.length,reporter.messages.length);
+		assertEquals(expected.length,reporter.messages.length, pos);
 		for (i in 0 ... expected.length)
 			messageEquals(expected[i],reporter.messages[i]);
 	}
@@ -79,6 +80,57 @@ class A {
 		src = "
 class A {
 //spaces here\n        \n
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"IndentationCharacter",
+		line:4,
+		column:1,
+		severity:INFO,
+		message:"Wrong indentation character"
+		};
+
+		checkMessages(src,new IndentationCharacterCheck(), [message]);
+	}
+
+	function testIndentaion() {
+//Use show whitespace on this test
+
+		var src = "
+class A {
+//no whitespace here\nvar a;\n
+}";
+
+
+		checkMessages(src,new IndentationCharacterCheck(), []);
+
+		src = "
+class A {
+//tabs here\n\t\tvar a;\n
+}";
+
+		checkMessages(src,new IndentationCharacterCheck(), []);
+
+		src = "
+class A {
+//spaces here\n        var a;\n
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"IndentationCharacter",
+		line:4,
+		column:1,
+		severity:INFO,
+		message:"Wrong indentation character"
+		};
+
+		checkMessages(src,new IndentationCharacterCheck(), [message]);
+
+		src = "
+class A {
+//spaces here\n\t\t  \t  var a;\n
 }";
 
 		var message = {
@@ -259,6 +311,9 @@ class Test extends CheckTestCase {
 		r.add(new TrailingWhitespaceCheckTest());
 		r.add(new SpacingCheckTest());
 		r.add(new NamingCheckTest());
+		r.add(new HexademicalLiteralsCheckTest());
+		r.add(new ArrayInstantiationCheckTest());
+		r.add(new ERegInstantiationCheckTest());
 		var success = r.run();
 		Sys.exit(success?0:1);
 	}
