@@ -3,6 +3,8 @@ package haxelint;
 import haxeparser.Data.TypeDecl;
 import haxeparser.Data.Definition;
 import haxeparser.Data.ClassFlag;
+import haxeparser.Data.EnumFlag;
+import haxeparser.Data.EnumConstructor;
 import haxe.macro.Expr;
 
 class Utils {
@@ -30,9 +32,17 @@ class Utils {
 		}
 	}
 
+	static function walkMeta(meta:Metadata, cb:Expr -> Void){
+		for (m in meta) for (p in m.params) walkExpr(p,cb);
+	}
+
+	static function walkCommonDefinition<A,B> (d:Definition<A, B>, cb:Expr -> Void) {
+		for (p in d.params) walkTypeParamDecl(p,cb);
+		walkMeta(d.meta, cb);
+	}
+
 	public static function walkClass(d:Definition<ClassFlag, Array<Field>>, cb:Expr -> Void) {
-		for (p in d.params)   walkTypeParamDecl(p,cb);
-		for (m in d.meta) for (p in m.params) walkExpr(p,cb);
+		walkCommonDefinition(d, cb);
 		for (f in d.flags) switch f {
 			case HExtends(t) | HImplements(t): walkTypePath(t,cb);
 			default:
@@ -42,8 +52,18 @@ class Utils {
 		}
 	}
 
-	public static function walkEnum(d, cb:Expr -> Void) {
-		throw "Unimplemented";
+	public static function walkEnum(d:Definition<EnumFlag, Array<EnumConstructor>>, cb:Expr -> Void) {
+		walkCommonDefinition(d, cb);
+		for (ec in d.data) {
+			walkMeta(ec.meta, cb);
+			for (arg in ec.args) {
+				walkComplexType(arg.type, cb);
+			}
+			for (param in ec.params) {
+				walkTypeParamDecl(param, cb);
+			}
+			if (ec.type != null) walkComplexType(ec.type, cb);
+		}
 	}
 
 	public static function walkAbstract(d, cb:Expr -> Void) {
@@ -54,8 +74,9 @@ class Utils {
 		//Do nothing
 	}
 
-	public static function walkTypedef(d, cb:Expr -> Void) {
-		throw "Unimplemented";
+	public static function walkTypedef(d:Definition<EnumFlag, ComplexType>, cb:Expr -> Void) {
+		walkCommonDefinition(d, cb);
+		walkComplexType(d.data, cb);
 	}
 
 	public static function walkTypePath(tp:TypePath, cb:Expr -> Void) {
