@@ -20,7 +20,7 @@ class XMLReporter implements IReporter{
 	}
 
 	function encode(s:String):String{
-		return s;
+		return escapeXML(s);
 	}
 
 	public function fileStart(f:LintFile){
@@ -43,6 +43,31 @@ class XMLReporter implements IReporter{
 		case WARNING: return "warning";
 		case ERROR: return "error";
 		}
+	}
+
+	/*
+	 * Solution from mustache.js
+	 * https://github.com/janl/mustache.js/blob/master/mustache.js#L49
+	 */
+	static var entityMap:Map<String,String> = [
+	"&" => "&amp;",
+	"<" => "&lt;",
+	">" => "&gt;",
+	'"' => "&quot;",
+	"'" => "&#39;",
+	"/" => "&#x2F;"
+	];
+
+	static var entityRE = ~/[&<>"'\/]/g;
+
+	static function replace(str:String, re:EReg):String{
+		return re.map(str,function(re){
+			return entityMap[re.matched(0)];
+		});
+	}
+
+	static function escapeXML(string:String):String {
+		return replace(string, entityRE);
 	}
 
 	public function addMessage(m:LintMessage){
