@@ -138,6 +138,7 @@ class Checker {
 				severity:ERROR,
 				moduleName:"Checker"
 			});
+			for (reporter in reporters) reporter.fileFinish(file);
 			return;
 		}
 
@@ -145,6 +146,7 @@ class Checker {
 			var messages;
 			try {
 				messages = check.run(this);
+				for (reporter in reporters) for (m in messages) reporter.addMessage(m);
 			}
 			catch (e:Dynamic) {
 				for (reporter in reporters) reporter.addMessage({
@@ -155,9 +157,7 @@ class Checker {
 					severity:ERROR,
 					moduleName:"Checker"
 				});
-				return;
 			}
-			for (reporter in reporters) for (m in messages) reporter.addMessage(m);
 		}
 
 		for (reporter in reporters) reporter.fileFinish(file);
