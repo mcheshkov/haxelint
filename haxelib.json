@@ -3,8 +3,8 @@
 	"url": "https://github.com/mcheshkov/haxelint",
 	"license": "MIT",
 	"description": "Static analysis and style checking for Haxe in Haxe",
-	"version": "0.1.2",
-	"releasenote": "Line separator detection",
+	"version": "0.1.3",
+	"releasenote": "Basic argument handling, bugfixes (line separator detection, hex literals)",
 	"contributors": ["mcheshkov"],
 	"dependencies": {
 		"haxeparser-substituted": "1.0.1"
