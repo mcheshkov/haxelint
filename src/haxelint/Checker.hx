@@ -17,14 +17,6 @@ class Checker {
 		reporters = [];
 	}
 
-	public function addAllChecks() {
-		CompileTime.importPackage("haxelint.checks");
-		var checksClasses = CompileTime.getAllClasses(Check);
-		for (cl in checksClasses){
-			checks.push(Type.createInstance(cl,[]));
-		}
-	}
-
 	public function addCheck(check:Check) {
 		checks.push(check);
 	}

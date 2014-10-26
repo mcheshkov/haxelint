@@ -1,7 +1,9 @@
 package haxelint;
 
+import haxelint.ChecksInfo;
 import haxelint.reporter.IReporter;
 import hxargs.Args;
+import haxe.Json;
 import sys.FileSystem;
 import haxelint.reporter.XMLReporter;
 import haxelint.reporter.Reporter;
@@ -23,40 +25,82 @@ class Main {
 			}
 			if (oldCwd != null) Sys.setCwd(cwd); // FIXME instead of this one should gracefully parse absolute-relative path
 
-			var reporter:IReporter = new Reporter();
-			var files:Array<String> = [];
-
-			var argHandler = Args.generate([
-			@doc("Set reporter")
-			["-r", "--reporter"] => function(reporterName:String) reporter = createReporter(reporterName),
-			@doc("List all reporters")
-			["--list-reporters"] => function() listReporters(),
-			@doc("Set sources to process")
-			["-s", "--source"] => function(sourcePath:String) traverse(sourcePath,files),
-			_ => function(arg:String) throw "Unknown command: " + arg
-			]);
-			if (args.length == 0) {
-				Sys.println(argHandler.getDoc());
-				Sys.exit(0);
-			}
-			argHandler.parse(args);
-
-			var toProcess:Array<LintFile> = [];
-			for (file in files){
-				var code = File.getContent(file);
-				toProcess.push({name:file,content:code});
-			}
-
-			var checker = new Checker();
-			checker.addAllChecks();
-			checker.addReporter(reporter);
-			checker.process(toProcess);
+			var main = new Main();
+			main.run(args);
 		}
 		catch(e:Dynamic){
 			trace(e);
 			trace(CallStack.toString(CallStack.exceptionStack()));
 		}
 		if (oldCwd != null) Sys.setCwd(oldCwd); // FIXME instead of this one should gracefully parse absolute-relative path
+	}
+
+	var reporter:IReporter;
+	var info:ChecksInfo;
+	var checker:Checker;
+
+	function new(){
+		reporter = new Reporter();
+		info = new ChecksInfo();
+		checker = new Checker();
+	}
+
+	function run(args:Array<String>){
+		var files:Array<String> = [];
+		var configPath:String = null;
+
+		var argHandler = Args.generate([
+		@doc("Set reporter")
+		["-r", "--reporter"] => function(reporterName:String) reporter = createReporter(reporterName),
+		@doc("List all reporters")
+		["--list-reporters"] => function() listReporters(),
+		@doc("Set config file")
+		["-c", "--config"] => function(_configPath:String) configPath = _configPath,
+		@doc("List all checks")
+		["--list-checks"] => function() listChecks(),
+		@doc("Set sources to process")
+		["-s", "--source"] => function(sourcePath:String) traverse(sourcePath,files),
+		_ => function(arg:String) throw "Unknown command: " + arg
+		]);
+
+		if (args.length == 0) {
+			Sys.println(argHandler.getDoc());
+			Sys.exit(0);
+		}
+		argHandler.parse(args);
+
+		var toProcess:Array<LintFile> = [];
+		for (file in files){
+			var code = File.getContent(file);
+			toProcess.push({name:file,content:code});
+		}
+
+		if (configPath == null){
+			addAllChecks();
+		}
+		else {
+			var configText = File.getContent(configPath);
+			var config = Json.parse(configText);
+			var checks:Array<Dynamic> = config.checks;
+			for (check in checks){
+				var check = info.build(check.type);
+				checker.addCheck(check);
+			}
+		}
+		checker.addReporter(reporter);
+		checker.process(toProcess);
+	}
+
+	function addAllChecks():Void{
+		for (check in info.checks()){
+			checker.addCheck(info.build(check.name));
+		}
+	}
+
+	function listChecks():Void{
+		for (check in info.checks()){
+			Sys.println('${check.name}: ${check.description}');
+		}
 	}
 
 	//FIXME some macro maybe?
