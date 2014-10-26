@@ -1,7 +1,4 @@
 import haxelint.ChecksInfo;
-import haxelint.LintMessage.SeverityLevel;
-import haxelint.checks.HexademicalLiteralsCheck;
-import Test.CheckTestCase;
 
 class ChecksInfoTest extends haxe.unit.TestCase {
 	function testChecksInfo() {
