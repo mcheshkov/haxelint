@@ -7,23 +7,26 @@ Static analysis and style checking for Haxe in Haxe
 
 ### Install
 
-From haxelib (not yet, soon)
+From haxelib
 
     haxelib install haxelint
 
 Manually build
 
-    haxe build.nxml
+    haxe build.hxml
 
 ### Usage
 
 From command line
 
-    neko bin/haxelint.n <HAXE SOURCES FILE OR DIR>
+	haxelib run haxelint -s <HAXE SOURCES FILE OR DIR>
+	
+Run just `haxelib run haxelint` for help
 
 Using API
 
 	var file = {name:"myfile.hx", content:"enum A{}"};
 	var checker = new haxelint.Checker();
 	checker.addReporter(new XMLReporter()); // see haxelint.reporter.IReporter, provide your own implementation
+	checker.addCheck(new Check()); // see haxelint.checks.Check class and subclasses
 	checker.process([file]);
