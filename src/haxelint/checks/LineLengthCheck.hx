@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("LineLength")
 class LineLengthCheck extends Check {
 	public function new(){
 		super();
@@ -14,9 +15,5 @@ class LineLengthCheck extends Check {
 			var line = _checker.lines[i];
 			if (line.length > length) log('Too long line', i+1, 1, INFO);
 		}
-	}
-
-	override function getModuleName():String{
-		return "LineLength";
 	}
 }

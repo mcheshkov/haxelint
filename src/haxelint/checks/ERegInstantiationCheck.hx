@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("ERegInstantiation")
 class ERegInstantiationCheck extends Check {
 	public function new(){
 		super();
@@ -20,9 +21,5 @@ class ERegInstantiationCheck extends Check {
 			default:
 			}
 		});
-	}
-
-	override function getModuleName():String{
-		return "ERegInstantiation";
 	}
 }

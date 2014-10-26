@@ -5,6 +5,7 @@ import haxe.macro.Expr.Binop;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("Spacing")
 class SpacingCheck extends Check {
 	public function new(){
 		super();
@@ -41,9 +42,5 @@ class SpacingCheck extends Check {
 
 	function opString(bo:Binop){
 		return (new Printer()).printBinop(bo);
-	}
-
-	override function getModuleName():String{
-		return "Spacing";
 	}
 }

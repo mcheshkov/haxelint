@@ -4,6 +4,7 @@ import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data;
 import haxe.macro.Expr;
 
+@name("Naming")
 class NamingCheck extends Check {
 	public function new(){
 		super();
@@ -75,9 +76,5 @@ class NamingCheck extends Check {
 				default:
 			}
 		});
-	}
-
-	override function getModuleName():String{
-		return "Naming";
 	}
 }

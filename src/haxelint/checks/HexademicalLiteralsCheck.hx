@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("HexademicalLiterals")
 class HexademicalLiteralsCheck extends Check {
 	public function new(){
 		super();
@@ -35,9 +36,5 @@ class HexademicalLiteralsCheck extends Check {
 			else bodyExpected = bodyExpected.toUpperCase();
 			if (bodyExpected != bodyActual) logPos('Bad hexademical literal', p, SeverityLevel.INFO);
 		}
-	}
-
-	override function getModuleName():String{
-		return "HexademicalLiterals";
 	}
 }

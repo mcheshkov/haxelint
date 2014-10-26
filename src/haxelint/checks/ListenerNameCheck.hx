@@ -8,6 +8,7 @@ import haxeparser.Data.ClassFlag;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("ListenerName")
 class ListenerNameCheck extends Check {
 	public function new(){
 		super();
@@ -52,9 +53,5 @@ class ListenerNameCheck extends Check {
 		var re = ~/^on.*/;
 		var match = re.match(name);
 		if (!match) log("Wrong listener name: " + name, line, col, INFO);
-	}
-
-	override function getModuleName():String{
-		return "ListenerName";
 	}
 }

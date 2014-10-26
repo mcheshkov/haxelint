@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("Indent")
 class IndentCheck extends Check {
 	public function new(){
 		super();
@@ -66,9 +67,5 @@ class IndentCheck extends Check {
 
 			if (tk.tok == BrOpen) desiredIndent+=indentStep;
 		}
-	}
-
-	override function getModuleName():String{
-		return "Indentation";
 	}
 }

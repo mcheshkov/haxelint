@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("IndentationCharacter")
 class IndentationCharacterCheck extends Check {
 	public function new(){
 		super();
@@ -21,9 +22,5 @@ class IndentationCharacterCheck extends Check {
 			var line = _checker.lines[i];
 			if (line.length > 0 && ! re.match(line)) log('Wrong indentation character', i+1, 1, INFO);
 		}
-	}
-
-	override function getModuleName():String{
-		return "IndentationCharacter";
 	}
 }

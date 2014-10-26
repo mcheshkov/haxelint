@@ -40,8 +40,12 @@ class Check {
 		});
 	}
 
+	var moduleName:String = null;
+
 	public function getModuleName():String{
-		throw "Unimplemented";
-		return "";
+		if (moduleName == null){
+			moduleName = ChecksInfo.getCheckName(this);
+		}
+		return moduleName;
 	}
 }

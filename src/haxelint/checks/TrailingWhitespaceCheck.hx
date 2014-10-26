@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("TrailingWhitespace")
 class TrailingWhitespaceCheck extends Check {
 	public function new(){
 		super();
@@ -14,9 +15,5 @@ class TrailingWhitespaceCheck extends Check {
 			var line = _checker.lines[i];
 			if (re.match(line)) log('Trailing whitespace', i+1, line.length, INFO);
 		}
-	}
-
-	override function getModuleName():String{
-		return "TrailingWhitespace";
 	}
 }

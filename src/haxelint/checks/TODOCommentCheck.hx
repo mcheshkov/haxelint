@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("TODOComment")
 class TODOCommentCheck extends Check {
 	public function new(){
 		super();
@@ -18,9 +19,5 @@ class TODOCommentCheck extends Check {
 			default:
 			}
 		}
-	}
-
-	override function getModuleName():String{
-		return "TODOComment";
 	}
 }

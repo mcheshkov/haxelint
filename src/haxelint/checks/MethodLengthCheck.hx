@@ -8,6 +8,7 @@ import haxeparser.Data.ClassFlag;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("MethodLength")
 class MethodLengthCheck extends Check {
 	public function new(){
 		super();
@@ -67,9 +68,5 @@ class MethodLengthCheck extends Check {
 		}
 
 		if (lmax - lmin > maxFunctionLines) log('Very big function: ${fname}', lp.line+1, lp.ofs+1, INFO);
-	}
-
-	override function getModuleName():String{
-		return "MethodLength";
 	}
 }

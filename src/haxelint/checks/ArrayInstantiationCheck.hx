@@ -3,6 +3,7 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
+@name("ArrayInstantiation")
 class ArrayInstantiationCheck extends Check {
 	public function new(){
 		super();
@@ -17,9 +18,5 @@ class ArrayInstantiationCheck extends Check {
 			default:
 			}
 		});
-	}
-
-	override function getModuleName():String{
-		return "ArrayInstantiation";
 	}
 }
