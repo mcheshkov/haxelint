@@ -3,8 +3,8 @@ package haxelint.checks;
 import haxelint.LintMessage.SeverityLevel;
 import haxeparser.Data.Token;
 
-@name("HexademicalLiterals")
-class HexademicalLiteralsCheck extends Check {
+@name("HexadecimalLiterals")
+class HexadecimalLiteralsCheck extends Check {
 	public function new(){
 		super();
 	}

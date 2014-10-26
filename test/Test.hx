@@ -173,7 +173,7 @@ class Test extends CheckTestCase {
 		r.add(new TrailingWhitespaceCheckTest());
 		r.add(new SpacingCheckTest());
 		r.add(new NamingCheckTest());
-		r.add(new HexademicalLiteralsCheckTest());
+		r.add(new HexadecimalLiteralsCheckTest());
 		r.add(new ArrayInstantiationCheckTest());
 		r.add(new ERegInstantiationCheckTest());
 		r.add(new ChecksInfoTest());
