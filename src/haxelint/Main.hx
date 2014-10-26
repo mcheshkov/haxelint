@@ -47,7 +47,7 @@ class Main {
 
 	function run(args:Array<String>){
 		var files:Array<String> = [];
-		var configPath:String = null;
+		var _configPath:String = null;
 
 		var argHandler = Args.generate([
 		@doc("Set reporter")
@@ -55,7 +55,7 @@ class Main {
 		@doc("List all reporters")
 		["--list-reporters"] => function() listReporters(),
 		@doc("Set config file")
-		["-c", "--config"] => function(_configPath:String) configPath = _configPath,
+		["-c", "--config"] => function(configPath:String) _configPath = configPath,
 		@doc("List all checks")
 		["--list-checks"] => function() listChecks(),
 		@doc("Set sources to process")
@@ -75,11 +75,11 @@ class Main {
 			toProcess.push({name:file,content:code});
 		}
 
-		if (configPath == null){
+		if (_configPath == null){
 			addAllChecks();
 		}
 		else {
-			var configText = File.getContent(configPath);
+			var configText = File.getContent(_configPath);
 			var config = Json.parse(configText);
 			var checks:Array<Dynamic> = config.checks;
 			for (check in checks){
