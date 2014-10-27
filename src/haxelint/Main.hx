@@ -79,11 +79,20 @@ class Main {
 			addAllChecks();
 		}
 		else {
+			//TODO split config loading to separate class
 			var configText = File.getContent(_configPath);
 			var config = Json.parse(configText);
 			var checks:Array<Dynamic> = config.checks;
-			for (check in checks){
-				var check = info.build(check.type);
+			for (checkConf in checks){
+				var check = info.build(checkConf.type);
+				if (checkConf.props != null){
+					var props = Reflect.fields(checkConf.props);
+					for (prop in props){
+						//FIXME check available properties and their types
+						var val = Reflect.field(checkConf.props, prop);
+						Reflect.setField(check, prop, val);
+					}
+				}
 				checker.addCheck(check);
 			}
 		}
