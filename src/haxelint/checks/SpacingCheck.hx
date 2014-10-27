@@ -11,8 +11,8 @@ class SpacingCheck extends Check {
 		super();
 	}
 
-	var spaceAroundBinop = true;
-	var spaceIfCondition = true;
+	public var spaceAroundBinop = true;
+	public var spaceIfCondition = true;
 
 	override function actualRun() {
 		var lastExpr = null;
