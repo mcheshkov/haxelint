@@ -3,8 +3,8 @@
 	"url": "https://github.com/mcheshkov/haxelint",
 	"license": "MIT",
 	"description": "Static analysis and style checking for Haxe in Haxe",
-	"version": "0.1.5",
-	"releasenote": "Implement enum walking, fix exception catching",
+	"version": "0.1.6",
+	"releasenote": "Checks metadata, basic JSON config",
 	"contributors": ["mcheshkov"],
 	"dependencies": {
 		"haxeparser-substituted": "1.0.1"
