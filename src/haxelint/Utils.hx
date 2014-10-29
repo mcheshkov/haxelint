@@ -3,6 +3,7 @@ package haxelint;
 import haxeparser.Data.TypeDecl;
 import haxeparser.Data.Definition;
 import haxeparser.Data.ClassFlag;
+import haxeparser.Data.AbstractFlag;
 import haxeparser.Data.EnumFlag;
 import haxeparser.Data.EnumConstructor;
 import haxe.macro.Expr;
@@ -66,8 +67,15 @@ class Utils {
 		}
 	}
 
-	public static function walkAbstract(d, cb:Expr -> Void) {
-		throw "Unimplemented";
+	public static function walkAbstract(d:Definition<AbstractFlag, Array<Field>>, cb:Expr -> Void) {
+		walkCommonDefinition(d, cb);
+		for (f in d.flags) switch f {
+			case AFromType(ct) | AToType(ct) | AIsType(ct): walkComplexType(ct,cb);
+			default:
+		}
+		for (f in d.data) {
+			walkField(f,cb);
+		}
 	}
 
 	public static function walkImport(sl, mode, cb:Expr -> Void) {
