@@ -177,6 +177,7 @@ class Test extends CheckTestCase {
 		r.add(new ArrayInstantiationCheckTest());
 		r.add(new ERegInstantiationCheckTest());
 		r.add(new TabForAligningCheckTest());
+		r.add(new ShortEmptyBlockCheckTest());
 		r.add(new ChecksInfoTest());
 		var success = r.run();
 		Sys.exit(success?0:1);
