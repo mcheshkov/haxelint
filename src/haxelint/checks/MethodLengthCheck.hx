@@ -38,7 +38,7 @@ class MethodLengthCheck extends Check {
 			default:
 			}
 
-			Utils.walkField(f, function(e) {
+			ExprUtils.walkField(f, function(e) {
 				switch(e.expr){
 					case EFunction(name, ff):
 						checkFunction(e);

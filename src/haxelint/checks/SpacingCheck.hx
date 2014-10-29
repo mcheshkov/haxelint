@@ -19,7 +19,7 @@ class SpacingCheck extends Check {
 	override function actualRun() {
 		var lastExpr = null;
 
-		Utils.walkFile(_checker.ast,function(e){
+		ExprUtils.walkFile(_checker.ast,function(e){
 			if (lastExpr == null){
 				lastExpr = e;
 				return;

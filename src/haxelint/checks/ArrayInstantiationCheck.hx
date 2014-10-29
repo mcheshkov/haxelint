@@ -10,7 +10,7 @@ class ArrayInstantiationCheck extends Check {
 	}
 
 	override function actualRun() {
-		Utils.walkFile(_checker.ast, function(e){
+		ExprUtils.walkFile(_checker.ast, function(e){
 			switch(e.expr){
 			case ENew({pack:[],name:"Array"},_):
 				var lp = _checker.getLinePos(e.pos.min);

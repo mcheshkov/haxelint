@@ -9,7 +9,7 @@ class ShortEmptyBlockCheck extends Check {
 	}
 
 	override function actualRun() {
-		Utils.walkFile(_checker.ast, function(e){
+		ExprUtils.walkFile(_checker.ast, function(e){
 			switch(e.expr){
 			case EBlock([]) | EObjectDecl([]):
 				if (e.pos.max - e.pos.min > "{}".length)

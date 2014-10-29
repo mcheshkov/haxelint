@@ -15,7 +15,7 @@ class ListenerNameCheck extends Check {
 	}
 
 	override public function actualRun() {
-		Utils.walkFile(_checker.ast,function(e) {
+		ExprUtils.walkFile(_checker.ast,function(e) {
 			switch(e.expr){
 				case ECall(e, params):
 					searchCall(e, params);

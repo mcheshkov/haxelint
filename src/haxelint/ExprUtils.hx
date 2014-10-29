@@ -8,7 +8,7 @@ import haxeparser.Data.EnumFlag;
 import haxeparser.Data.EnumConstructor;
 import haxe.macro.Expr;
 
-class Utils {
+class ExprUtils {
 
 	public static function walkFile(file:{pack: Array<String>, decls: Array<TypeDecl> }, cb:Expr -> Void) {
 		for (decl in file.decls){

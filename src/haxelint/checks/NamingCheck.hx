@@ -67,7 +67,7 @@ class NamingCheck extends Check {
 	}
 
 	function checkLocalVars(){
-		Utils.walkFile(_checker.ast, function(e){
+		ExprUtils.walkFile(_checker.ast, function(e){
 			switch(e.expr){
 				case EVars(vars):
 					for (v in vars){
