@@ -87,6 +87,54 @@ class A {
 
 		checkMessages(src,new SpacingCheck(), [message]);
 	}
+
+	function testSpacingAroundUnOp() {
+		var src = "
+class A {
+	function f(){
+		a++;
+		!b;
+	}
+}";
+
+		checkMessages(src,new SpacingCheck(), []);
+
+		src = "
+class A {
+	function f(){
+		a ++;
+	}
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Spacing",
+		line:4,
+		column:4 - 1, // -1 is because now it reports position of whole binop expr
+		severity:INFO,
+		message:"Space around ++"
+		};
+
+		checkMessages(src,new SpacingCheck(), [message]);
+
+		src = "
+class A {
+	function f(){
+		! a;
+	}
+}";
+
+		var message = {
+		fileName:FILE_NAME,
+		moduleName:"Spacing",
+		line:4,
+		column:4 - 1, // -1 is because now it reports position of whole binop expr
+		severity:INFO,
+		message:"Space around !"
+		};
+
+		checkMessages(src,new SpacingCheck(), [message]);
+	}
 }
 
 class NamingCheckTest extends CheckTestCase {
