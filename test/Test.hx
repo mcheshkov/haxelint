@@ -51,10 +51,17 @@ class CheckTestCase extends haxe.unit.TestCase {
 		var reporter = new TestReporter();
 		checker.addCheck(check);
 		checker.addReporter(reporter);
-		checker.process([{name:FILE_NAME,content:src}]);
-		assertEquals(expected.length,reporter.messages.length, pos);
-		for (i in 0 ... expected.length)
-			messageEquals(expected[i],reporter.messages[i]);
+		try{
+			checker.process([{name:FILE_NAME,content:src}]);
+			assertEquals(expected.length,reporter.messages.length, pos);
+			for (i in 0 ... expected.length)
+				messageEquals(expected[i],reporter.messages[i]);
+		}
+		catch(e:Dynamic){
+			trace('Expected: $expected');
+			trace('Actual: ${reporter.messages}');
+			throw e;
+		}
 	}
 }
 
@@ -225,7 +232,7 @@ class Test extends CheckTestCase {
 		r.add(new ArrayInstantiationCheckTest());
 		r.add(new ERegInstantiationCheckTest());
 		r.add(new TabForAligningCheckTest());
-		r.add(new ShortEmptyBlockCheckTest());
+		r.add(new BlockFormatCheckTest());
 		r.add(new ChecksInfoTest());
 		var success = r.run();
 		Sys.exit(success?0:1);
