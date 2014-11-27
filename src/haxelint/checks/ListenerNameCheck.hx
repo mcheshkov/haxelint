@@ -50,7 +50,7 @@ class ListenerNameCheck extends Check {
 	}
 
 	function checkListenerName(name:String, line:Int, col:Int){
-		var re = ~/^on.*/;
+		var re = ~/^_?on.*/;
 		var match = re.match(name);
 		if (!match) log("Wrong listener name: " + name, line, col, INFO);
 	}
