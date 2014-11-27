@@ -2,7 +2,7 @@ package haxelint.checks;
 
 import haxelint.LintMessage.SeverityLevel;
 
-@name("ShortEmptyBlock")
+@name("BlockFormatCheck")
 class BlockFormatCheck extends Check {
 	public function new(){
 		super();
