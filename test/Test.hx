@@ -224,16 +224,18 @@ class Test extends CheckTestCase {
 	static function main() {
 		var r = new haxe.unit.TestRunner();
 		r.add(new Test());
-		r.add(new IndentationCharacterCheckTest());
-		r.add(new TrailingWhitespaceCheckTest());
-		r.add(new SpacingCheckTest());
-		r.add(new NamingCheckTest());
-		r.add(new HexadecimalLiteralsCheckTest());
 		r.add(new ArrayInstantiationCheckTest());
-		r.add(new ERegInstantiationCheckTest());
-		r.add(new TabForAligningCheckTest());
 		r.add(new BlockFormatCheckTest());
 		r.add(new ChecksInfoTest());
+		r.add(new EmptyLinesCheckTest());
+		r.add(new ERegInstantiationCheckTest());
+		r.add(new HexadecimalLiteralsCheckTest());
+		r.add(new IndentationCharacterCheckTest());
+		r.add(new NamingCheckTest());
+		r.add(new SpacingCheckTest());
+		r.add(new TabForAligningCheckTest());
+		r.add(new TrailingWhitespaceCheckTest());
+
 		var success = r.run();
 		Sys.exit(success?0:1);
 	}
